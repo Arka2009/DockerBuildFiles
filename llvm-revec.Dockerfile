@@ -4,9 +4,10 @@
 FROM ubuntu:20.04
 
 # Set the user
-ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /root
+ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Singapore
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && apt-get install -y \
@@ -64,8 +65,17 @@ RUN apt-get update && apt-get install -y \
     llvm-6.0 \
     clang-6.0 \
     ninja-build \
+    openssh-client \
  && rm -rf /var/lib/apt/lists/*
 
+# Required For GitHub Authentication
+RUN mkdir -p /root/.ssh && \
+    chmod 700 /root/.ssh && \
+    ssh-keyscan github.com > /root/.ssh/known_hosts
+COPY id_rsa_docker /root/.ssh/id_rsa
+COPY id_rsa_docker.pub /root/.ssh/id_rsa.pub
+
+# Startup Script
 COPY buildInstallREVEC.sh /root/
 RUN chmod +x /root/buildInstallREVEC.sh
-CMD ["/bin/bash"]
+CMD ["sh","-c","/root/buildInstallREVEC.sh"]

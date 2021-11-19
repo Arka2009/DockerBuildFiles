@@ -9,26 +9,17 @@ BUILD_DIR="${ROOT}/llvm-${LLVM_VERSION}-install/build"
 INSTALL_DIR="${ROOT}/llvm-$LLVM_VERSION-install/install"
 
 
-# INstall them separately as a part of Dockerfile
-# sudo apt-get update
-# sudo apt-get install llvm-6.0 clang-6.0 cmake ninja-build
-
 # Clone
 if [ ! -d ${SRC_DIR} ]
 then
     echo "Cloning"
-    git clone --depth 1 git@github.com/revec/llvm-revec.git ${SRC_DIR}
+    git clone --depth 1 git@github.com:revec/llvm-revec.git ${SRC_DIR}
 
-    cd ${SRC_DIR}/llvm/tools
+    cd ${SRC_DIR}/tools
     git clone --depth 1 git@github.com:revec/clang-revec.git clang
 
-    cd ${SRC_DIR}/llvm/tools/clang
+    cd ${SRC_DIR}/tools/clang
     git clone --depth 1 git@github.com:llvm-mirror/clang-tools-extra.git extra
-
-    cd ${SRC_DIR}/llvm/projects
-    git clone --depth 1 git@github.com:llvm-mirror/libcxx.git
-    git clone --depth 1 git@github.com:llvm-mirror/libcxxabi.git
-    git clone --depth 1 git@github.com:llvm-mirror/compiler-rt.git
 else
     echo "${SRC_DIR} already exists"
 fi
@@ -50,4 +41,6 @@ else
 fi
 
 # Build
-cd ${BUILD_DIR} && make -j 20 && make install && cd ${CDIR}
+cd ${BUILD_DIR} && make -j 4 && make install && cd ${CDIR}
+
+/bin/bash
