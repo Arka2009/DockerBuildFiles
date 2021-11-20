@@ -1,3 +1,4 @@
+# Key files are to be ignores
 id_rsa*
 id_ecdsa*
 id_ed25519*

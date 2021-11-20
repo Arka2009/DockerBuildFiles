@@ -69,13 +69,13 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Required For GitHub Authentication
+ARG SSH_PRIVKEY_FILE
 RUN mkdir -p /root/.ssh && \
     chmod 700 /root/.ssh && \
     ssh-keyscan github.com > /root/.ssh/known_hosts
-COPY id_rsa_docker /root/.ssh/id_rsa
-COPY id_rsa_docker.pub /root/.ssh/id_rsa.pub
+COPY ${SSH_PRIVKEY_FILE} /root/.ssh/id_rsa
 
 # Startup Script
-COPY buildInstallREVEC.sh /root/
-RUN chmod +x /root/buildInstallREVEC.sh
-CMD ["sh","-c","/root/buildInstallREVEC.sh"]
+COPY StartupScripts/Startup_LLVMRevec.sh /root/
+RUN chmod +x /root/Startup_LLVMRevec.sh
+CMD ["sh","-c","/root/Startup_LLVMRevec.sh"]
