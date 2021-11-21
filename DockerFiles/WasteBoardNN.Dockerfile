@@ -1,11 +1,15 @@
 FROM ubuntu:20.04
 
+ARG WDIR=/root
+ARG DEBIAN_FRONTEND=noninteractive
+WORKDIR ${WDIR}
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV TZ=Asia/Singapore
 ENV PATH /opt/conda/bin:$PATH
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Intall Anaconda
-RUN set -x && \
-    apt-get update --fix-missing && \
+RUN apt-get update --fix-missing && \
     apt-get install -y --no-install-recommends \
         bzip2 \
         ca-certificates \
@@ -16,9 +20,12 @@ RUN set -x && \
         libxrender1 \
         mercurial \
         openssh-client \
+        openjdk-8-jdk \
         procps \
         subversion \
         wget \
+        vim \
+        less \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* && \
     UNAME_M="$(uname -m)" && \
@@ -47,28 +54,48 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
 
-
 # Install Tensorflow
-RUN apt-get update --fix-missing && apt-get install -y python3-pip
+RUN apt-get update --fix-missing && \
+    apt-get install -y python3-pip \
+    virtualenv \
+    swig \
+    && rm -rf /var/lib/apt/lists/*
 
+# Some of these would have already installed
 RUN python3 -m pip --no-cache-dir install --upgrade \
     "pip<20.3" \
-    setuptools
+    setuptools \
+    Pillow \
+    h5py \
+    keras_preprocessing \
+    matplotlib \
+    mock \
+    'numpy<1.19.0' \
+    scipy \
+    sklearn \
+    pandas \
+    future \
+    portpicker \
+    enum34
 
 RUN ln -s $(which python3) /usr/local/bin/python
 ARG TF_PACKAGE=tensorflow
 ARG TF_PACKAGE_VERSION=2.7.0
 RUN python3 -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}}
-COPY TensorflowBashrc.sh /etc/bash.bashrc
+COPY Configs/TensorflowBashrc.sh /etc/bash.bashrc
 RUN chmod a+rwx /etc/bash.bashrc
 
-RUN apt-get update --fix-missing && apt-get install -y vim
-RUN echo "alias ll='ls -lFh'" >> ~/.bashrc
-# ARG VIMRC=~/.vimrc
-# RUN touch ${VIMRC}
-# RUN echo "se bg=dark" > ${VIMRC}
-# RUN echo "se nu" >> ${VIMRC}
-# RUN echo "se hlsearch" >> ${VIMRC}
-# RUN echo "se incsearch" >> ${VIMRC}
 
+# Required For GitHub Authentication
+ARG SSH_PRIVKEY_FILE
+RUN mkdir -p ${WDIR}/.ssh && \
+    chmod 700 ${WDIR}/.ssh && \
+    ssh-keyscan github.com > ${WDIR}/.ssh/known_hosts
+COPY ${SSH_PRIVKEY_FILE} ${WDIR}/.ssh/id_rsa
+
+RUN touch ${WDIR}/.bashrc
+RUN echo "alias ll='ls -lFh'" >> ${WDIR}/.bashrc
+
+# Startup
 CMD ["/bin/bash"]
+# CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/tf --ip 0.0.0.0 --no-browser --allow-root"]
