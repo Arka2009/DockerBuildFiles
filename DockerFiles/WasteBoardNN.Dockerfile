@@ -59,21 +59,18 @@ RUN apt-get update --fix-missing && \
     apt-get install -y python3-pip \
     virtualenv \
     swig \
+    libprotobuf-dev \
+    protobuf-compiler \
     && rm -rf /var/lib/apt/lists/*
 
 # Some of these would have already installed
 RUN python3 -m pip --no-cache-dir install --upgrade \
-    "pip<20.3" \
+    pip \
     setuptools \
     Pillow \
     h5py \
     keras_preprocessing \
-    matplotlib \
     mock \
-    'numpy<1.19.0' \
-    scipy \
-    sklearn \
-    pandas \
     future \
     portpicker \
     enum34
@@ -84,7 +81,6 @@ ARG TF_PACKAGE_VERSION=2.7.0
 RUN python3 -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}}
 COPY Configs/TensorflowBashrc.sh /etc/bash.bashrc
 RUN chmod a+rwx /etc/bash.bashrc
-
 
 # Required For GitHub Authentication
 ARG SSH_PRIVKEY_FILE
@@ -98,4 +94,4 @@ RUN echo "alias ll='ls -lFh'" >> ${WDIR}/.bashrc
 
 # Startup
 CMD ["/bin/bash"]
-# CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/tf --ip 0.0.0.0 --no-browser --allow-root"]
+# CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/root/workspace --ip 0.0.0.0 --no-browser --allow-root"]
