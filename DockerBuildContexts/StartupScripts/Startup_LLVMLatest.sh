@@ -23,7 +23,7 @@ if [ ! -d ${BUILD_DIR} ]
 then
     mkdir -p $BUILD_DIR
     cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
-              -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld" \
+              -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;lld" \
               -DLLVM_USE_LINKER=gold \
               -DLLVM_TARGETS_TO_BUILD="X86;RISCV;ARM" \
               -DLLVM_INCLUDE_TESTS=OFF \
@@ -34,10 +34,6 @@ else
 fi
 
 # Build
-cd ${BUILD_DIR}
-make -j 20
-make install
-cd ${CDIR}
+cd ${BUILD_DIR} && make -j 4 && make install && cd ${CDIR}
 
-# 
 /bin/bash

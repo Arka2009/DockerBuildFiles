@@ -64,6 +64,15 @@ RUN apt-get update && apt-get install -y \
     ninja-build \
  && rm -rf /var/lib/apt/lists/*
 
-COPY buildInstallLLVM.sh /root/
-RUN chmod +x /root/buildInstallLLVM.sh
-CMD ["sh","-c","/root/buildInstallLLVM.sh"]
+
+# Required For GitHub Authentication
+ARG SSH_PRIVKEY_FILE
+RUN mkdir -p /root/.ssh && \
+    chmod 700 /root/.ssh && \
+    ssh-keyscan github.com > /root/.ssh/known_hosts
+COPY ${SSH_PRIVKEY_FILE} /root/.ssh/id_rsa
+
+# Startup Script
+COPY StartupScripts/Startup_LLVMLatest.sh /root/
+RUN chmod +x /root/Startup_LLVMLatest.sh
+CMD ["sh","-c","/root/Startup_LLVMLatest.sh"]
