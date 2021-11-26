@@ -1,0 +1,13 @@
+[user]
+    name = Arka
+    email = amaity@wasteviz.tech
+[merge]
+    tool = vimdiff
+[core]
+    editor = vim
+[alias]
+    lg  = log --graph --decorate --oneline --all
+    lg1 = log --graph --decorate --oneline
+    lg2 = log --graph
+[credential]
+	helper = store
