@@ -72,6 +72,10 @@ RUN mkdir -p /root/.ssh && \
     ssh-keyscan github.com > /root/.ssh/known_hosts
 COPY ${SSH_PRIVKEY_FILE} /root/.ssh/id_rsa
 
+# Copy VIMRC configs
+ARG VIMRCFILE
+COPY ${VIMRCFILE} /root/.vimrc
+
 # Startup Script
 COPY StartupScripts/Startup_LLVMLatest.sh /root/
 RUN chmod +x /root/Startup_LLVMLatest.sh
