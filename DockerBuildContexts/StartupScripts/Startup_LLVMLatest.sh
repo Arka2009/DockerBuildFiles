@@ -1,39 +1,71 @@
 #!/bin/bash
 
-LLVM_VERSION="13.0.0"
-ROOT="/root/llvm-workspace"
+LLVM_VERSION="13.0.0" # Do not touch
+HOME="/root"
+ROOT="${HOME}/llvm-workspace"
 CDIR="${PWD}"
 
-SRC_DIR="${ROOT}/llvm-$LLVM_VERSION-src"
-BUILD_DIR="${ROOT}/llvm-${LLVM_VERSION}-install/build"
+SRCDIR="${ROOT}/llvm-$LLVM_VERSION-src"
+BUILDDIR="${ROOT}/llvm-${LLVM_VERSION}-install/build"
 INSTALL_DIR="${ROOT}/llvm-$LLVM_VERSION-install/install"
 
-
-# Clone
-if [ ! -d ${SRC_DIR} ]
+# Clone LLVM
+if [ ! -d ${SRCDIR} ]
 then
     echo "Cloning"
-    git clone -b llvmorg-$LLVM_VERSION --depth 1 https://github.com/llvm/llvm-project.git ${SRC_DIR}
+    git clone -b llvmorg-$LLVM_VERSION --depth 1 https://github.com/llvm/llvm-project.git ${SRCDIR}
 else 
-    echo "${SRC_DIR} already exists"
+    echo "${SRCDIR} already exists"
 fi
 
 # Configure
-if [ ! -d ${BUILD_DIR} ]
+if [ ! -d ${BUILDDIR} ]
 then
-    mkdir -p $BUILD_DIR
+    mkdir -p $BUILDDIR
     cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
               -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;lld" \
               -DLLVM_USE_LINKER=gold \
               -DLLVM_TARGETS_TO_BUILD="X86;RISCV;ARM" \
               -DLLVM_INCLUDE_TESTS=OFF \
-              -S ${SRC_DIR}/llvm \
-              -B ${BUILD_DIR}
+              -S ${SRCDIR}/llvm \
+              -B ${BUILDDIR}
 else
-    echo "${BUILD_DIR} alreay exists"
+    echo "${BUILDDIR} alreay exists"
 fi
 
-# Build
-cd ${BUILD_DIR} && make -j 4 && make install && cd ${CDIR}
+# Build (Comment this for now)
+# cd ${BUILDDIR} && make -j 4 && make install && cd ${CDIR}
+# touch ${HOME}/.bashrc
+# echo "export PATH=\"/root/llvm-workspace/llvm-13.0.0-install/build/bin:\$PATH\"" >> ${HOME}/.bashrc
 
-/bin/bash
+# Install ARM NEON
+
+# Install RISCV Tools
+
+#echo "Install Spike..."
+#ROOTSPIKESRC="${HOME}/riscv-spike"
+#if [ ! -d ${ROOTSPIKESRC} ]
+#then
+#    echo "Cloning to ${ROOTSPIKESRC}"
+#    git clone --depth=1 https://github.com/riscv-software-src/riscv-isa-sim.git ${ROOTSPIKESRC}
+#else
+#    echo "${ROOTSPIKESRC} already exist"
+#fi
+#
+#ROOTSPIKEBLD="${ROOTSPIKESRC}/build"
+#if [ ! -d ${ROOTSPIKEBLD} ]
+#then
+#    echo "Building ${ROOTSPIKEBLD}"
+#    mkdir -p ${ROOTSPIKEBLD}
+#    #apt-get install gmake
+#    # source ${ROOTSPIKEBLD}/../configure --prefix=
+#
+#else
+#     echo "${ROOTSPIKESRC} already exist"
+#fi
+
+# Install ARM Simulator
+# echo "Install ARM Simulator..."
+
+# Comment this for now
+# /bin/bash
