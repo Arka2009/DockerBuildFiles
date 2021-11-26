@@ -12,6 +12,6 @@ fi
 
 docker container run --rm \
         -v ${hostDir}:${contDir} \
-		-p 5902:5902 \
+		-p 5900:5900 \
 		--name=${containerName} \
 		-d -it ${dockerImage}
