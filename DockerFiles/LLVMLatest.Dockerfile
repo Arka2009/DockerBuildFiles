@@ -62,6 +62,7 @@ RUN apt-get update && apt-get install -y \
     cmake \
     unzip \
     ninja-build \
+    gcc-multilib \
  && rm -rf /var/lib/apt/lists/*
 
 
