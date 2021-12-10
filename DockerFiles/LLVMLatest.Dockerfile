@@ -1,6 +1,6 @@
 # Dockerfile for C/C++ container 
 # for experimenting with
-# auto (re)-vectorization tools, especially from ARM --> RISCV
+# ARM(Neon) --> RISCV V
 FROM ubuntu:20.04
 
 # Set the user
@@ -63,6 +63,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     ninja-build \
     gcc-multilib \
+    xdot \
+	graphviz \
  && rm -rf /var/lib/apt/lists/*
 
 
@@ -80,4 +82,5 @@ COPY ${VIMRCFILE} /root/.vimrc
 # Startup Script
 COPY StartupScripts/Startup_LLVMLatest.sh /root/
 RUN chmod +x /root/Startup_LLVMLatest.sh
-CMD ["sh","-c","/root/Startup_LLVMLatest.sh"]
+RUN echo "Please execute Startup_LLVMLatest.sh"
+CMD ["/bin/bash"]
