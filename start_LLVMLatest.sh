@@ -1,10 +1,14 @@
 #!/bin/bash
+
+llvmver="llvm-13.0.0"
+portM=5902
+
 hostDir="/home/amaity/GenData/DockerVolumes"
 dropboxHostDir="/home/amaity/Dropbox/WL2_LLVMIRTestFiles"
 contDir="/root/llvm-workspace"
 dropboxContDir="/root/Dropbox"
-dockerImage="arka2009/llvm-13.0.0:v0"
-containerName="llvm-13.0.0-container"
+dockerImage="arka2009/${llvmver}:v0"
+containerName="${llvmver}-container"
 
 if [ ! -d ${hostDir} ]
 then
@@ -23,6 +27,6 @@ fi
 docker container run --rm \
         -v ${hostDir}:${contDir} \
 		-v ${dropboxHostDir}:${dropboxContDir} \
-		-p 5902:5902 \
+		-p ${portM}:${portM} \
 		--name=${containerName} \
 		-d -it ${dockerImage}
