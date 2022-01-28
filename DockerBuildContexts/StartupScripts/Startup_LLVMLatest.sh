@@ -38,5 +38,5 @@ cd ${BUILDDIR} && make -j 4 && make install && cd ${CDIR}
 
 # Set the bash
 touch ${HOME}/.bashrc
-echo "export PATH=\"${INSTALLDIR}/bin:\$PATH\"" >> ${HOME}/.bashrc
-echo "export LLVMSRC=\"${SRCDIR}/llvm\"" >> ${HOME}/.bashrc
+echo "export PATH=\"${INSTALLDIR}/bin:${BUILDDIR}/bin:\$PATH\"" >> ${HOME}/.bashrc
+echo "export LLVMSRC=\"${SRCDIR}\"" >> ${HOME}/.bashrc
