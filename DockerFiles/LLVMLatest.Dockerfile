@@ -69,11 +69,11 @@ RUN apt-get update && apt-get install -y \
 
 
 # Required For GitHub Authentication
-ARG SSH_PRIVKEY_FILE
-RUN mkdir -p /root/.ssh && \
-    chmod 700 /root/.ssh && \
-    ssh-keyscan github.com > /root/.ssh/known_hosts
-COPY ${SSH_PRIVKEY_FILE} /root/.ssh/id_rsa
+#ARG SSH_PRIVKEY_FILE
+#RUN mkdir -p /root/.ssh && \
+#    chmod 700 /root/.ssh && \
+#    ssh-keyscan github.com > /root/.ssh/known_hosts
+#COPY ${SSH_PRIVKEY_FILE} /root/.ssh/id_rsa
 
 # Copy VIMRC configs
 ARG VIMRCFILE
