@@ -1,9 +1,9 @@
 #!/bin/bash
 
-llvmver="llvm-13.0.1"
+llvmver="llvm-main"
 BUILDROOT=${PWD}
 dockerImage="arka2009/${llvmver}:v0"
-dockerFile="${BUILDROOT}/DockerFiles/LLVMLatest.Dockerfile"
+dockerFile="${BUILDROOT}/DockerFiles/LLVMQEMU.Dockerfile"
 dockerBuildContext="${BUILDROOT}/DockerBuildContexts"
 sshPrivKeyFile="SSHKeys/id_rsa_docker" # This path is relative to ${dockerBuildContext}
 vimrcFile="Configs/vimrc"

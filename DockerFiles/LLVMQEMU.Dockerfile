@@ -9,7 +9,9 @@ WORKDIR /root
 ENV TZ=Asia/Singapore
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -y \
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install --no-install-recommends --yes \
     python \
     screen \
     tmux \
@@ -20,7 +22,6 @@ RUN apt-get update && apt-get install -y \
     automake \
     autotools-dev \
     build-essential \
-    curl \
     wget \
     libboost-dev \
     libsqlite3-dev \
@@ -45,7 +46,6 @@ RUN apt-get update && apt-get install -y \
     git \
     g++-9 \
     vim \
-    build-essential \
     git-core \
     m4 \
     scons \
@@ -65,22 +65,30 @@ RUN apt-get update && apt-get install -y \
     gcc-multilib \
     xdot \
 	graphviz \
+    valgrind \
+    ca-certificates \
+    libglib2.0-dev \
+    libgtk2.0-dev \
+    libfdt-dev \
+    libpixman-1-dev \
+    binutils-aarch64-linux-gnu \
+    binutils-riscv64-linux-gnu \
  && rm -rf /var/lib/apt/lists/*
 
 
 # Required For GitHub Authentication
-#ARG SSH_PRIVKEY_FILE
-#RUN mkdir -p /root/.ssh && \
+# ARG SSH_PRIVKEY_FILE
+# RUN mkdir -p /root/.ssh && \
 #    chmod 700 /root/.ssh && \
 #    ssh-keyscan github.com > /root/.ssh/known_hosts
-#COPY ${SSH_PRIVKEY_FILE} /root/.ssh/id_rsa
+# COPY ${SSH_PRIVKEY_FILE} /root/.ssh/id_rsa
 
 # Copy VIMRC configs
 ARG VIMRCFILE
 COPY ${VIMRCFILE} /root/.vimrc
 
 # Startup Script
-COPY StartupScripts/Startup_LLVMLatest.sh /root/
-RUN chmod +x /root/Startup_LLVMLatest.sh
-RUN echo "Please execute Startup_LLVMLatest.sh"
+COPY StartupScripts/build_LLVMQEMU.sh /root/
+RUN chmod +x /root/build_LLVMQEMU.sh
+RUN echo "Please execute build_LLVMQEMU.sh"
 CMD ["/bin/bash"]

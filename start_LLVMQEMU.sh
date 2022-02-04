@@ -1,7 +1,7 @@
 #!/bin/bash
 
-llvmver="llvm-13.0.1"
-portM=5902
+llvmver="llvm-main"
+portM=5903
 
 hostDir="/home/amaity/GenData/DockerVolumes"
 dropboxHostDir="/home/amaity/Dropbox/WL2_LLVMIRTestFiles/BackendTutorial"
