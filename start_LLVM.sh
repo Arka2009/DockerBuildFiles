@@ -1,6 +1,6 @@
 #!/bin/bash
 
-llvmver="llvm-13.0.0"
+llvmver="llvm-13.0.1"
 portM=5902
 
 hostDir="/home/amaity/GenData/DockerVolumes"

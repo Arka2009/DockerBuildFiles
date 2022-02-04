@@ -1,7 +1,8 @@
 #!/bin/bash
 
+llvmver="llvm-13.0.1"
 BUILDROOT=${PWD}
-dockerImage="arka2009/llvm-13.0.0:v0"
+dockerImage="arka2009/${llvmver}:v0"
 dockerFile="${BUILDROOT}/DockerFiles/LLVMLatest.Dockerfile"
 dockerBuildContext="${BUILDROOT}/DockerBuildContexts"
 sshPrivKeyFile="SSHKeys/id_rsa_docker" # This path is relative to ${dockerBuildContext}
