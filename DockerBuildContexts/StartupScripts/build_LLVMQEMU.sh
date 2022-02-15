@@ -17,15 +17,16 @@ QEMUSRCDIR="${ROOT}/qemu-rvv-src"
 if [ ! -d ${QEMUSRCDIR} ]
 then
     GIT_SSL_NO_VERIFY=1 git clone --branch $QEMUBRANCH --depth 1  https://github.com/sifive/qemu.git ${QEMUSRCDIR}
-else
-    echo "${QEMUSRCDIR} exists"
-fi
-cd ${QEMUSRCDIR} && ./configure \
+    cd ${QEMUSRCDIR} && ./configure \
                 --enable-capstone \
                 --enable-plugins \
                 --python=python3 \
                 --target-list=aarch64-linux-user,riscv64-linux-user \
                 --disable-werror \
+else
+    echo "${QEMUSRCDIR} exists"
+fi
+
 
 cd ${QEMUSRCDIR} && make -j4 && make install && cd ${CDIR}
 

@@ -71,10 +71,23 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     libgtk2.0-dev \
     libfdt-dev \
     libpixman-1-dev \
-    binutils-aarch64-linux-gnu \
-    binutils-riscv64-linux-gnu \
  && rm -rf /var/lib/apt/lists/*
 
+
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install --no-install-recommends --yes \
+        gcc-aarch64-linux-gnu \
+        g++-aarch64-linux-gnu \
+        binutils-aarch64-linux-gnu
+
+
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install --no-install-recommends --yes \
+        gcc-riscv64-linux-gnu \
+        g++-riscv64-linux-gnu \
+        binutils-riscv64-linux-gnu
 
 # Required For GitHub Authentication
 # ARG SSH_PRIVKEY_FILE
