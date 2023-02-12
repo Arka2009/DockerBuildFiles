@@ -1,52 +1,18 @@
 #!/bin/bash
 
 llvmver="llvm-main"
-portM=5903
 
-hostDir="/home/amaity/GenData/DockerVolumes"
-dropboxHostDir="/home/amaity/Dropbox/WL2_LLVMIRTestFiles/BackendTutorial"
-contDir="/root/llvm-workspace"
-dropboxContDir="/root/Dropbox"
-dockerImage="arka2009/${llvmver}:v0"
-containerName="${llvmver}-container"
-simdBenchDirHost="/home/amaity/Desktop/SIMDBenchmarks"
-simdBenchDirCont="/root/SIMDBenchmarks"
-llvmTblGenTutDirHost="/home/amaity/Desktop/HsuLLVMTutorial"
-llvmTblGenTutDirCont="/root/HsuLLVMTutorial"
 
-if [ ! -d ${hostDir} ]
-then
-	mkdir -p ${hostDir}
-else
-	echo "${hostDir} already exist"
-fi
-
-if [ ! -d ${dropboxHostDir} ]
-then
-    mkdir -p ${dropboxHostDir}
-else
-    echo "${dropboxHostDir} already exist"
-fi
-
-if [ ! -d ${simdBenchDirHost} ]
-then
-	mkdir -p ${simdBenchDirHost}
-else
-	echo "${simdBenchDirHost} already exist"
-fi
-
-if [ ! -d ${llvmTblGenTutDirHost} ]
-then
-	git clone --depth=1 https://github.com/PacktPublishing/LLVM-Techniques-Tips-and-Best-Practices-Clang-and-Middle-End-Libraries.git ${llvmTblGenTutDirHost}
-else
-	echo "${llvmTblGenTutDirHost} already exist"
-fi
+dockerImage="star5/${llvmver}:v0"
+containerName="llvm14_SIMDTranslation_${USER}"
+LLVM_HOSTDIR="${HOME}/GenData/DockerVolumes"
+LLVM_DESTDIR="/root/llvm-workspace"
+TEST_HOSTDIR="${HOME}/Desktop/SIMDTranslationTest"
+TEST_CONTDIR="/root/SIMDTranslationTest"
 
 docker container run --rm \
-        -v ${hostDir}:${contDir} \
-		-v ${dropboxHostDir}:${dropboxContDir} \
-		-v ${simdBenchDirHost}:${simdBenchDirCont} \
-		-v ${llvmTblGenTutDirHost}:${llvmTblGenTutDirCont} \
-		-p ${portM}:${portM} \
+		-v ${LLVM_HOSTDIR}:${LLVM_DESTDIR} \
+		-v ${TEST_HOSTDIR}:${TEST_CONTDIR} \
 		--name=${containerName} \
 		-d -it ${dockerImage}
+docker exec -it ${containerName} /bin/bash
